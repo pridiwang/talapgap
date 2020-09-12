@@ -1,0 +1,45 @@
+version: "2"
+services:
+    www:
+        build: .
+        ports:
+            - "8001:80"
+        volumes:
+            - ./www:/var/www/html/
+        links:
+            - db
+        networks:
+            - default
+    db:
+        image: mysql
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: talapgap
+            MYSQL_USER: talapgap
+            MYSQL_PASSWORD: vY8hL7aE4qO6uJ9u
+            MYSQL_ROOT_PASSWORD: jY0eD1gM8vU0dK0t
+        volumes:
+            - ./dump:/docker-entryponit-initdb.d
+            - ./data:/var/lib/mysql
+        networks:
+            - default
+        command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        links:
+            - db
+        ports:
+            - 8002:80
+        environment: 
+            MYSQL_USER: talapgap
+            MYSQL_PASSWORD: vY8hL7aE4qO6uJ9u
+            MYSQL_ROOT_PASSWORD: jY0eD1gM8vU0dK0t
+        networks:
+            - default
+
+volumes:
+    persistent:
+
+
+        
